@@ -1,4 +1,4 @@
-# Simulador de execução fora de ordem com scoreboard - MO401 - 2s2025
+# Simulador de execução fora de ordem com scoreboard - MO401 - 2s2026
 
 ## Objetivo Geral
 
