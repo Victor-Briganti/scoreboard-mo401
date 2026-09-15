@@ -2,7 +2,6 @@ import re
 import sys
 
 from memory import Operation
-from tables import InstRow
 from utils import INSTRUCTIONS, REGISTERS
 
 
@@ -69,8 +68,7 @@ def parse_op(data: str) -> Operation:
     return Operation(data, opcode, rd, rs1, rs2)
 
 
-def parse(path: str) -> tuple[list[InstRow], list[Operation]]:
-    instructions: list[InstRow] = []
+def parse(path: str) -> list[Operation]:
     operations: list[Operation] = []
     with open(path, "r") as file:
         for line in file:
@@ -79,7 +77,6 @@ def parse(path: str) -> tuple[list[InstRow], list[Operation]]:
 
             data = line.strip()
 
-            instructions.append(InstRow(data, 0, 0, 0, 0))
             operations.append(parse_op(data))
 
-    return instructions, operations
+    return operations

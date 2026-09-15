@@ -1,3 +1,3 @@
-from .functional import FunctionalStatus, FuncRow
-from .register import RegisterResult
-from .instruction import InstRow
+from .functional import FuncRow, FunctionalStatus
+from .instruction import InstRow, InstructionStatus
+from .register import RegisterStatus

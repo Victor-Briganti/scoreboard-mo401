@@ -1,7 +1,7 @@
 from utils import REGISTERS
 
 
-class RegisterResult:
+class RegisterStatus:
     def __init__(self):
         self.table: dict[str, str | None] = {}
         for reg in REGISTERS:
