@@ -1,12 +1,9 @@
-from tables import FunctionalStatus
-from tables import RegisterResult
+import sys
+
+from utils import parse
 
 
 def main() -> None:
-    print("Resultado dos Registradores")
-    reg = RegisterResult()
-    reg.print()
-
-    print("Unidade Funcional")
-    func = FunctionalStatus()
-    func.print()
+    path = sys.argv[1]
+    _, operations = parse(path)
+    print(operations)

@@ -5,6 +5,15 @@ FUNCTION_UNITS = {
     "div": (1, 100),
 }
 
+INSTRUCTIONS = [
+    "fld",
+    "fsd",
+    "fadd",
+    "fsub",
+    "fmul",
+    "fdiv",
+]
+
 # Referência para os registradores:
 # https://riscv.org/wp-content/uploads/2024/12/riscv-calling.pdf
 REGISTERS = [

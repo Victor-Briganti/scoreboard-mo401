@@ -1,1 +1,2 @@
-from .arch import REGISTERS, FUNCTION_UNITS
+from .arch import REGISTERS, INSTRUCTIONS, FUNCTION_UNITS
+from .parser import parse

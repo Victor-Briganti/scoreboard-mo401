@@ -17,6 +17,7 @@ class RegisterResult:
         headers = ["Register", "Unit"]
         widths = [10, 10]
 
+        # Cabeçalho no estilo markdown
         header_str = (
             "| " + " | ".join(f"{h:<{w}}" for h, w in zip(headers, widths)) + " |"
         )
