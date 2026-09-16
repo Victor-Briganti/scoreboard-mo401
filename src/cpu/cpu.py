@@ -37,7 +37,7 @@ class Cpu:
             # Adiciona a instrução da fila de execução da CPU
             op.fu = fu
             self.queue.append(op)
-            self.inst_table.update_issue(op.inst, self.cycle)
+            self.inst_table.update_issue(op.address, self.cycle)
 
             self.fetch.pop()
             return
@@ -49,18 +49,18 @@ class Cpu:
             row.rk = False
             row.rj = False
             self.func_table.update_row(op.fu, row)
-            self.inst_table.update_read(op.inst, self.cycle)
+            self.inst_table.update_read(op.address, self.cycle)
 
     def _execute(self, op: Operation) -> None:
         fu = re.sub(r"\d", "", op.fu)
-        self.inst_table.update_exec(op.inst, self.cycle, FUNCTION_UNITS[fu][1])
+        self.inst_table.update_exec(op.address, self.cycle, FUNCTION_UNITS[fu][1])
 
     def _write(self, op: Operation) -> None:
         # Verifica se existe um WAR
         if not self.func_table.can_write(op):
             return
 
-        self.inst_table.update_write(op.inst, self.cycle)
+        self.inst_table.update_write(op.address, self.cycle)
 
         # Limpa as tabelas de status
         if op.rd in REGISTERS:
@@ -86,7 +86,7 @@ class Cpu:
             if not self.fetch.is_empty():
                 self._issue()
             for op in reversed(list(self.queue)):
-                inst = self.inst_table.get(op.inst)
+                inst = self.inst_table.get(op.address)
                 if inst.issue == self.cycle:
                     continue
 
@@ -98,3 +98,5 @@ class Cpu:
                     self._write(op)
 
             self._update()
+            # print("\n")
+            # self.inst_table.print()

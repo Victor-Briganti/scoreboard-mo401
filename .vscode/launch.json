@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/.venv/bin/scoreboard",
             "args": [
-                "${workspaceFolder}/examples/example4.s"
+                "${workspaceFolder}/examples/example9.s"
             ],
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"
