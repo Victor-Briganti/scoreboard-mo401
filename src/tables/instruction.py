@@ -18,25 +18,30 @@ class InstructionStatus:
         for op in operations:
             self.table[op.inst] = InstRow(None, None, None, None, None)
 
+        self.new_table = self.table.copy()
+
     def get(self, inst: str) -> InstRow:
         return self.table[inst]
 
     def update_issue(self, inst: str, cycle: int):
-        self.table[inst].issue = cycle
+        self.new_table[inst].issue = cycle
 
     def update_read(self, inst: str, cycle: int):
-        self.table[inst].read = cycle
+        self.new_table[inst].read = cycle
 
     def update_write(self, inst: str, cycle: int):
-        self.table[inst].write = cycle
+        self.new_table[inst].write = cycle
 
     def update_exec(self, inst: str, cycle: int, fu_cycles: int):
         if self.table[inst].exec is None:
-            self.table[inst].exec = cycle
-            self.table[inst].exec_counter = fu_cycles - 1
+            self.new_table[inst].exec = cycle
+            self.new_table[inst].exec_counter = fu_cycles - 1
         else:
-            self.table[inst].exec = self.table[inst].exec + 1
-            self.table[inst].exec_counter = self.table[inst].exec_counter - 1
+            self.new_table[inst].exec = self.table[inst].exec + 1
+            self.new_table[inst].exec_counter = self.table[inst].exec_counter - 1
+
+    def update(self):
+        self.table = self.new_table.copy()
 
     def print(self):
         headers = [

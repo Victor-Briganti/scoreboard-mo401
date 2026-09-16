@@ -48,7 +48,7 @@ class Cpu:
         if row.rk and row.rj:
             row.rk = False
             row.rj = False
-            self.func_table.update(op.fu, row)
+            self.func_table.update_row(op.fu, row)
             self.inst_table.update_read(op.inst, self.cycle)
 
     def _execute(self, op: Operation) -> None:
@@ -71,6 +71,11 @@ class Cpu:
 
         self.queue.remove(op)
 
+    def _update(self) -> None:
+        self.func_table.update()
+        self.reg_table.update()
+        self.inst_table.update()
+
     def start(self) -> None:
         while True:
             self.cycle = self.cycle + 1
@@ -91,3 +96,5 @@ class Cpu:
                     self._execute(op)
                 else:
                     self._write(op)
+
+            self._update()

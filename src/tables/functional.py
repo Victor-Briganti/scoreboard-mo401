@@ -20,6 +20,7 @@ class FuncRow:
 class FunctionalStatus:
     def __init__(self):
         self.table: dict[str, FuncRow | None] = {}
+        self.new_table: dict[str, FuncRow | None] = {}
 
         fu_expansion: dict[str, list[str]] = {}
         for key, value in FUNCTION_UNITS.items():
@@ -36,6 +37,8 @@ class FunctionalStatus:
         self.inst_to_fu: dict[str, list[str]] = {
             inst: fu_expansion.get(fu, [fu]) for inst, fu in INST_TO_FU.items()
         }
+
+        self.new_table = self.table.copy()
 
     def get(self, fu: str) -> FuncRow:
         return self.table[fu]
@@ -64,17 +67,17 @@ class FunctionalStatus:
         rk = qk is None
 
         row = FuncRow(busy, op, fi, fj, fk, qj, qk, rj, rk)
-        self.table[fu] = row
+        self.new_table[fu] = row
 
-    def update(
+    def update_row(
         self,
         fu: str,
         row: FuncRow,
     ) -> None:
-        self.table[fu] = row
+        self.new_table[fu] = row
 
     def reset_q(self, fu: str) -> None:
-        for value in self.table.values():
+        for value in self.new_table.values():
             if value is not None:
                 if value.qj == fu:
                     value.qj = None
@@ -85,7 +88,7 @@ class FunctionalStatus:
                     value.rk = True
 
     def remove(self, fu: str) -> None:
-        self.table[fu] = None
+        self.new_table[fu] = None
 
     def can_write(self, op: Operation) -> bool:
         # Verica se existe um WAR
@@ -97,6 +100,9 @@ class FunctionalStatus:
             ):
                 return False
         return True
+
+    def update(self) -> None:
+        self.table = self.new_table.copy()
 
     def print(self):
         headers = ["unit", "busy", "op", "fi", "fj", "fk", "qj", "qk", "rj", "rk"]

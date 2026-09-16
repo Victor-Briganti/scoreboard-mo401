@@ -7,11 +7,16 @@ class RegisterStatus:
         for reg in REGISTERS:
             self.table[reg] = None
 
+        self.new_table = self.table.copy()
+
     def get(self, reg) -> str | None:
         return self.table.get(reg)
 
     def set(self, reg, fu):
-        self.table[reg] = fu
+        self.new_table[reg] = fu
+
+    def update(self):
+        self.table = self.new_table.copy()
 
     def print(self):
         headers = ["Register", "Unit"]
