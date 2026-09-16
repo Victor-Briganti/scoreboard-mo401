@@ -37,7 +37,7 @@ def parse_op(data: str) -> Operation:
             print(f"{rs2} não é um registrador válido na arquitetura")
             sys.exit(-1)
 
-        return Operation(data, opcode, rd, rs1, rs2)
+        return Operation(data, opcode, rd, rs1, rs2, None)
 
     # Parse da 'fsd'
     if opcode == INSTRUCTIONS[1]:
@@ -59,13 +59,13 @@ def parse_op(data: str) -> Operation:
             print(f"{rs2} não é um registrador válido na arquitetura")
             sys.exit(-1)
 
-        return Operation(data, opcode, rd, rs1, rs2)
+        return Operation(data, opcode, rd, rs1, rs2, None)
 
     rd = token[1]
     rs1 = token[2]
     rs2 = token[3]
 
-    return Operation(data, opcode, rd, rs1, rs2)
+    return Operation(data, opcode, rd, rs1, rs2, None)
 
 
 def parse(path: str) -> list[Operation]:

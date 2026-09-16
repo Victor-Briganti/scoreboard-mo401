@@ -14,6 +14,15 @@ INSTRUCTIONS = [
     "fdiv",
 ]
 
+INST_TO_FU = {
+    "fld": "int",
+    "fsd": "int",
+    "fadd": "add",
+    "fsub": "add",
+    "fmul": "mult",
+    "fdiv": "div",
+}
+
 # Referência para os registradores:
 # https://riscv.org/wp-content/uploads/2024/12/riscv-calling.pdf
 REGISTERS = [

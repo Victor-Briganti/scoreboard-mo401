@@ -9,6 +9,7 @@ class InstRow:
     read: int | None
     exec: int | None
     write: int | None
+    exec_counter: int | None
 
 
 class InstructionStatus:
@@ -16,6 +17,26 @@ class InstructionStatus:
         self.table: dict[str, InstRow] = {}
         for op in operations:
             self.table[op.inst] = InstRow(None, None, None, None)
+
+    def get(self, inst: str) -> InstRow:
+        return self.table[inst]
+
+    def update_issue(self, inst: str, cycle: int):
+        self.table[inst].issue = cycle
+
+    def update_read(self, inst: str, cycle: int):
+        self.table[inst].read = cycle
+
+    def update_write(self, inst: str, cycle: int):
+        self.table[inst].write = cycle
+
+    def update_exec(self, inst: str, cycle: int, fu_cycles: int):
+        if self.table[inst].exec is None:
+            self.table[inst].exec = cycle
+            self.table[inst].exec_counter = fu_cycles - 1
+        else:
+            self.table[inst].exec = self.table[inst].exec + 1
+            self.table[inst].exec_counter = self.table[inst].exec_counter - 1
 
     def print(self):
         headers = [

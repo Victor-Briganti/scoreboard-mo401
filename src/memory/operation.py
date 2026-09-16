@@ -8,3 +8,4 @@ class Operation:
     rd: str
     rs1: str
     rs2: str
+    fu: str | None
