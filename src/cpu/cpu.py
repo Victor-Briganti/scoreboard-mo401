@@ -76,12 +76,33 @@ class Cpu:
         self.reg_table.update()
         self.inst_table.update()
 
-    def start(self) -> None:
+    def _print_tables(self) -> None:
+        print(f"\n===== Cycle {self.cycle} =====\n")
+
+        print("## Instruction Status")
+        self.inst_table.print()
+
+        print("\n## Functional Unit Status")
+        self.func_table.print()
+
+        print("\n## Register Result Status")
+        self.reg_table.print()
+
+        print()
+
+    def start(
+        self,
+        debug_print: str | None = None,
+        stop_cycle: int | None = None,
+    ) -> None:
         while True:
             self.cycle = self.cycle + 1
 
             if self.fetch.is_empty() and len(self.queue) == 0:
-                return
+                break
+
+            if stop_cycle is not None and self.cycle >= stop_cycle:
+                break
 
             if not self.fetch.is_empty():
                 self._issue()
@@ -98,5 +119,9 @@ class Cpu:
                     self._write(op)
 
             self._update()
-            # print("\n")
-            # self.inst_table.print()
+
+            if debug_print == "all":
+                self._print_tables()
+
+        if debug_print == "final":
+            self._print_tables()

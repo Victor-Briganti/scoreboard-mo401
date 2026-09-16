@@ -28,10 +28,18 @@ class RegisterStatus:
         )
         separator_str = "|" + "|".join("-" * (w + 2) for w in widths) + "|"
 
+
+        table = ""
+        for reg, fu in self.table.items():
+            if fu is None:
+                continue
+
+            fu_str = str(fu)
+            row_str = f"| {reg:<{widths[0]}} | {fu_str:<{widths[1]}} |\n"
+            table += row_str
+
         print(header_str)
         print(separator_str)
+        if table != "":
+            print(table)
 
-        for reg, fu in self.table.items():
-            fu_str = "none" if fu is None else str(fu)
-            row_str = f"| {reg:<{widths[0]}} | {fu_str:<{widths[1]}} |"
-            print(row_str)

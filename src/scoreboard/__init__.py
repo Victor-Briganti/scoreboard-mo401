@@ -22,6 +22,24 @@ def parse_arg():
         required=True,
         help="Arquivo de configuração da arquitetura.",
     )
+    parser.add_argument(
+        "-p",
+        "--print",
+        nargs="?",
+        const="all",
+        default=None,
+        choices=["all", "final"],
+        dest="debug_print",
+        help="Imprime as tabelas de registradores, unidades funcionais e instruções. "
+    )
+    parser.add_argument(
+        "-s",
+        "--stop-cycle",
+        type=int,
+        default=None,
+        dest="stop_cycle",
+        help="Ciclo em que a execução deve parar.",
+    )
 
     return parser.parse_args()
 
@@ -32,5 +50,8 @@ def main() -> None:
     parse_config(args.config)
 
     cpu = Cpu(parse_assembly(args.filepath))
-    cpu.start()
+    cpu.start(
+        debug_print=args.debug_print,
+        stop_cycle=args.stop_cycle,
+    )
     cpu.inst_table.print()
