@@ -1,20 +1,36 @@
-import sys
+from argparse import ArgumentParser
 
 from cpu import Cpu
-from utils import parse
+from utils import parse_assembly
+from utils.parser import parse_config
+
+
+def parse_arg():
+    parser = ArgumentParser(description="Simulador do algoritmo de scoreboard.")
+
+    parser.add_argument(
+        "-f",
+        "--filepath",
+        type=str,
+        required=True,
+        help="Caminho do arquivo a ser executado",
+    )
+    parser.add_argument(
+        "-c",
+        "--config",
+        type=str,
+        required=True,
+        help="Arquivo de configuração da arquitetura.",
+    )
+
+    return parser.parse_args()
 
 
 def main() -> None:
-    path = ""
-    if len(sys.argv) > 1:
-        path = sys.argv[1]
-    else:
-        print("Uso:")
-        print(f"\t{sys.argv[0]} example.s")
-        sys.exit(-1)
+    args = parse_arg()
 
-    operations = parse(path)
+    parse_config(args.config)
 
-    cpu = Cpu(operations)
+    cpu = Cpu(parse_assembly(args.filepath))
     cpu.start()
     cpu.inst_table.print()

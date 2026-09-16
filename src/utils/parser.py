@@ -2,7 +2,7 @@ import re
 import sys
 
 from memory import Operation
-from utils import INSTRUCTIONS, REGISTERS
+from utils import FUNCTION_UNITS, INSTRUCTIONS, REGISTERS
 
 
 def parse_op(data: str, address: str = "0x0001") -> Operation:
@@ -68,7 +68,7 @@ def parse_op(data: str, address: str = "0x0001") -> Operation:
     return Operation(address, data, opcode, rd, rs1, rs2, None)
 
 
-def parse(path: str) -> list[Operation]:
+def parse_assembly(path: str) -> list[Operation]:
     operations: list[Operation] = []
     with open(path, "r") as file:
         addr = 1
@@ -82,3 +82,25 @@ def parse(path: str) -> list[Operation]:
             addr += 1
 
     return operations
+
+
+def parse_config(path: str) -> list[Operation]:
+    with open(path, "r") as file:
+        for line in file:
+            tokens = line.split()
+
+            if tokens[0] not in FUNCTION_UNITS:
+                print(f"Unidade {tokens[0]} não é reconhecida pelo sistema")
+                sys.exit(-1)
+
+            if int(tokens[1]) <= 0:
+                print(
+                    f"{tokens[1]} não é uma quantidade valida de unidades funcionais."
+                )
+                sys.exit(-1)
+
+            if int(tokens[2]) <= 0:
+                print(f"{tokens[2]} não é uma quantidade valida de ciclos.")
+                sys.exit(-1)
+
+            FUNCTION_UNITS[tokens[0]] = (int(tokens[1]), int(tokens[2]))
