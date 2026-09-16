@@ -16,7 +16,7 @@ class InstructionStatus:
     def __init__(self, operations: list[Operation]):
         self.table: dict[str, InstRow] = {}
         for op in operations:
-            self.table[op.inst] = InstRow(None, None, None, None)
+            self.table[op.inst] = InstRow(None, None, None, None, None)
 
     def get(self, inst: str) -> InstRow:
         return self.table[inst]

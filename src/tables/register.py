@@ -8,7 +8,7 @@ class RegisterStatus:
             self.table[reg] = None
 
     def get(self, reg) -> str | None:
-        return self.table[reg]
+        return self.table.get(reg)
 
     def set(self, reg, fu):
         self.table[reg] = fu

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from memory import Operation
 from utils import FUNCTION_UNITS, INST_TO_FU
 
 
@@ -41,7 +42,7 @@ class FunctionalStatus:
         fus = self.inst_to_fu[opcode]
 
         for und in fus:
-            if not self.table[und].busy:
+            if self.table[und] is None:
                 return und
 
         return None
@@ -57,8 +58,8 @@ class FunctionalStatus:
         qj: str | None,
         qk: str | None,
     ) -> None:
-        rj = qj is not None
-        rk = qk is not None
+        rj = qj is None
+        rk = qk is None
 
         row = FuncRow(busy, op, fi, fj, fk, qj, qk, rj, rk)
         self.table[fu] = row
@@ -71,15 +72,29 @@ class FunctionalStatus:
         self.table[fu] = row
 
     def reset_q(self, fu: str) -> None:
-        for key, value in self.table.items():
-            if value.qj == fu:
-                self.table[fu].qj = None
+        for value in self.table.values():
+            if value is not None:
+                if value.qj == fu:
+                    value.qj = None
+                    value.rj = True
 
-            if value.qk == fu:
-                self.table[fu].qk = None
+                if value.qk == fu:
+                    value.qk = None
+                    value.rk = True
 
     def remove(self, fu: str) -> None:
         self.table[fu] = None
+
+    def can_write(self, op: Operation) -> bool:
+        # Verica se existe um WAR
+        for fu, row in self.table.items():
+            if (
+                row is not None
+                and op.fu != fu
+                and ((row.fj == op.rd and row.rj) or (row.fk == op.rd and row.rk))
+            ):
+                return False
+        return True
 
     def print(self):
         headers = ["unit", "busy", "op", "fi", "fj", "fk", "qj", "qk", "rj", "rk"]

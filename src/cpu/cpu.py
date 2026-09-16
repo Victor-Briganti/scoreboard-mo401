@@ -49,15 +49,17 @@ class Cpu:
             row.rk = False
             row.rj = False
             self.func_table.update(op.fu, row)
-
-        self.inst_table.update_read(op.inst, self.cycle)
+            self.inst_table.update_read(op.inst, self.cycle)
 
     def _execute(self, op: Operation) -> None:
-        inst = self.inst_table.get(op.inst)
         fu = re.sub(r"\d", "", op.fu)
-        self.inst_table.update_exec(inst, self.cycle, FUNCTION_UNITS[fu][1])
+        self.inst_table.update_exec(op.inst, self.cycle, FUNCTION_UNITS[fu][1])
 
     def _write(self, op: Operation) -> None:
+        # Verifica se existe um WAR
+        if not self.func_table.can_write(op):
+            return
+
         self.inst_table.update_write(op.inst, self.cycle)
 
         # Limpa as tabelas de status
@@ -66,16 +68,21 @@ class Cpu:
             self.func_table.reset_q(op.fu)
             self.func_table.remove(op.fu)
 
+        self.queue.remove(op)
+
     def start(self) -> None:
         while True:
             self.cycle = self.cycle + 1
 
-            if self.fetch.is_empty():
+            if self.fetch.is_empty() and len(self.queue) == 0:
                 return
 
-            self._issue()
-            for op in self.queue:
+            if not self.fetch.is_empty():
+                self._issue()
+            for op in reversed(list(self.queue)):
                 inst = self.inst_table.get(op.inst)
+                if inst.issue == self.cycle:
+                    continue
 
                 if inst.read is None:
                     self._read(op)
@@ -83,6 +90,3 @@ class Cpu:
                     self._execute(op)
                 else:
                     self._write(op)
-
-    def print(self) -> None:
-        print("Aqui")
