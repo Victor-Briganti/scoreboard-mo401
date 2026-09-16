@@ -20,20 +20,22 @@ class FuncRow:
 class FunctionalStatus:
     def __init__(self):
         self.table: dict[str, FuncRow | None] = {}
-        self.inst_to_fu: dict[str, list[str]] = INST_TO_FU
-        for key, value in FUNCTION_UNITS.items():
-            if value[0] != 1:
-                keys: list[str] = []
-                for i in range(value[0]):
-                    keys.append(key + str(i))
-                    self.table[keys[-1]] = None
 
-                self.inst_to_fu = {
-                    inst: keys if fu == key else [fu]
-                    for inst, fu in self.inst_to_fu.items()
-                }
+        fu_expansion: dict[str, list[str]] = {}
+        for key, value in FUNCTION_UNITS.items():
+            count = value[0]
+            if count > 1:
+                units = [f"{key}{i}" for i in range(count)]
             else:
-                self.table[key] = None
+                units = [key]
+
+            fu_expansion[key] = units
+            for unit in units:
+                self.table[unit] = None
+
+        self.inst_to_fu: dict[str, list[str]] = {
+            inst: fu_expansion.get(fu, [fu]) for inst, fu in INST_TO_FU.items()
+        }
 
     def get(self, fu: str) -> FuncRow:
         return self.table[fu]
@@ -41,9 +43,9 @@ class FunctionalStatus:
     def get_empty(self, opcode: str) -> str | None:
         fus = self.inst_to_fu[opcode]
 
-        for und in fus:
-            if self.table[und] is None:
-                return und
+        for fu in fus:
+            if self.table[fu] is None:
+                return fu
 
         return None
 

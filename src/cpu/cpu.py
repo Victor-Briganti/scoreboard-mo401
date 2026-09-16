@@ -65,8 +65,9 @@ class Cpu:
         # Limpa as tabelas de status
         if op.rd in REGISTERS:
             self.reg_table.set(op.rd, None)
-            self.func_table.reset_q(op.fu)
-            self.func_table.remove(op.fu)
+
+        self.func_table.reset_q(op.fu)
+        self.func_table.remove(op.fu)
 
         self.queue.remove(op)
 

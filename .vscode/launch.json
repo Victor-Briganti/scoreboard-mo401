@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/.venv/bin/scoreboard",
             "args": [
-                "${workspaceFolder}/example.s"
+                "${workspaceFolder}/examples/example4.s"
             ],
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"
@@ -18,7 +18,7 @@
             "request": "launch",
             "module": "scoreboard",
             "args": [
-                "${workspaceFolder}/example.s"
+                "${workspaceFolder}/examples/example.s"
             ],
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"
@@ -29,7 +29,7 @@
             "request": "launch",
             "program": "${file}",
             "args": [
-                "${workspaceFolder}/example.s"
+                "${workspaceFolder}/examples/example.s"
             ],
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}"
