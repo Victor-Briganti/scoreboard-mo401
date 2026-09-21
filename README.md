@@ -2,22 +2,29 @@
 
 ## Executando o Projeto
 
-Antes de iniciar é importante configurar o projeto, isso é feito utilizando o seguinte comando:
+Antes de iniciar, é necessário preparar o ambiente virtual e instalar o projeto. Para isso os comandos abaixo são necessários:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -e .
+
 ```
 
-Feito isso o sistema pode ser executado com o comando abaixo:
+O simulador pode ser executado chamando o módulo principal:
 
 ```bash
-python -m scoreboard examples/example1.s
+python -m scoreboard -c configs/config01.conf -f examples/example01.s
+
 ```
 
-## Configurações da Arquitetura
+A aplicação exige a passagem de duas *flags* obrigatórias durante a execução:
 
-Caso queira alterar a quantidade de unidades funcionais ou a quantidade de ciclos que o sistema vai utilizar basta alterar o arquivo `src/utils/arch.py`.
+- `-c`: Define o caminho do arquivo de configuração (disponíveis no diretório `configs/`).
+- `-f`: Define o caminho do arquivo de entrada (disponíveis no diretório `examples/`).
 
-A configuração de unidades funcionais se dá pela variável global `FUNCTION_UNITS`, onde o primeiro valor é o número de unidades funcionais daquele tipo e o segundo é a quantida de ciclos que ela leva para executar a operação.
+## Saídas Esperadas
+
+Os resultados esperados pela aplicação estão sendo salvos no diretório `outputs/` e organizados em subdiretórios baseados na configuração utilizada. Por exemplo, o diretório `outputs/config01/` armazena as execuções de todos os exemplos que rodaram sob o arquivo `config01`.
+
+Os nomes dos arquivos de saída refletem diretamente as suas entradas. Sendo assim, a entrada `example01.s` gera o resultado `output01.md`, o `example02.s` gera o `output02.md`, e assim por diante.

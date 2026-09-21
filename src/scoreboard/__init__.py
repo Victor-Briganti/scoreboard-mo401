@@ -46,9 +46,7 @@ def parse_arg():
 
 def main() -> None:
     args = parse_arg()
-
     parse_config(args.config)
-
     cpu = Cpu(parse_assembly(args.filepath))
     cpu.start(
         debug_print=args.debug_print,
