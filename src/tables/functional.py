@@ -91,7 +91,7 @@ class FunctionalStatus:
         self.new_table[fu] = None
 
     def can_write(self, op: Operation) -> bool:
-        # Verica se existe um WAR
+        # Verifica se existe um WAR
         for fu, row in self.table.items():
             if (
                 row is not None
